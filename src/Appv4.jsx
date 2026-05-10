@@ -7,11 +7,9 @@ const WORKS = [
     name: "철거",
     desc: "기존 마감재 철거",
     unit: "평",
-    prices: { basic: 20000, mid: 20000, premium: 20000 },
-    fixedPrice: true,
-    fixedNote: "평당 1.5만~2.8만원 범위 / 본 견적은 평당 2만원 기준",
-    note: { basic: "등급 무관 · 평당 2만원 기준", mid: "등급 무관 · 평당 2만원 기준", premium: "등급 무관 · 평당 2만원 기준" },
-    specialNote: "폐기물 처리비 포함 기준. 철거 범위·마감재 종류에 따라 1.5~2.8만원 차이. 석면 발생 시 별도 비용",
+    prices: { basic: 15000, mid: 20000, premium: 28000 },
+    note: { basic: "합지·장판 철거 기준", mid: "강마루·타일 철거 기준", premium: "전체 마감재 철거 기준" },
+    specialNote: "폐기물 처리비 포함 기준. 석면 등 특수 폐기물 발생 시 추가 비용 발생",
   },
   {
     id: "flooring",
@@ -327,7 +325,7 @@ export default function App() {
         {step === 1 && (
           <div style={styles.card}>
             <h2 style={styles.cardTitle}>수량을 확인해주세요</h2>
-            <p style={styles.cardDesc}>전용 {area}㎡ (공급 약 {Math.round(area * 1.35 / 3.3)}평) 기준으로 자동 입력됐어요. 다르면 수정하세요</p>
+            <p style={styles.cardDesc}>전용 {area}㎡ (공급 약 {Math.round(area * 1.35)}평) 기준으로 자동 입력됐어요. 다르면 수정하세요</p>
 
             <div style={styles.qtyList}>
               {selectedWorks.map((w) => (
@@ -397,7 +395,7 @@ export default function App() {
         {step === 3 && (
           <div style={styles.card}>
             <h2 style={styles.cardTitle}>📋 견적 결과</h2>
-            <p style={styles.cardDesc}>전용 {area}㎡ (공급 약 {Math.round(area * 1.35 / 3.3)}평) · {GRADES.find((g) => g.id === grade)?.label} 기준</p>
+            <p style={styles.cardDesc}>전용 {area}㎡ (공급 약 {Math.round(area * 1.35)}평) · {GRADES.find((g) => g.id === grade)?.label} 기준</p>
             <div style={styles.resultList}>
               {selectedWorks.map((w) => {
                 const qty = parseFloat(quantities[w.id] || 0);
@@ -412,14 +410,8 @@ export default function App() {
                       <div style={styles.resultAmount}>{formatKRW(amount)}</div>
                     </div>
                     <div style={styles.resultCalc}>
-                      {w.fixedPrice
-                        ? `${qty}${w.unit} × 평당 2만원 (등급 무관 고정단가)`
-                        : `${qty}${w.unit} × ${formatKRW(w.prices[grade])} — ${w.note[grade]}`
-                      }
+                      {qty}{w.unit} × {formatKRW(w.prices[grade])} — {w.note[grade]}
                     </div>
-                    {w.fixedPrice && (
-                      <div style={styles.fixedPriceNote}>📌 {w.fixedNote}</div>
-                    )}
                     {w.specialNote && (
                       <div style={styles.specialNote}>※ {w.specialNote}</div>
                     )}
@@ -518,7 +510,6 @@ const styles = {
   disclaimerBox: { background: "#f8fafc", borderRadius: 12, padding: "14px 16px", marginBottom: 8 },
   disclaimerTitle: { fontSize: 13, fontWeight: 700, color: "#1e293b", marginBottom: 8 },
   disclaimerText: { fontSize: 11, color: "#64748b", lineHeight: 2 },
-  fixedPriceNote: { fontSize: 11, color: "#6366f1", marginTop: 4, lineHeight: 1.5 },
   gradeDetailBox: { marginTop: 12, paddingTop: 12, borderTop: "1px solid #e2e8f0", width: "100%" },
   gradeDetailItem: { fontSize: 12, color: "#475569", lineHeight: 1.9 },
   divider: { borderTop: "1.5px solid #f1f5f9", margin: "20px 0" },
