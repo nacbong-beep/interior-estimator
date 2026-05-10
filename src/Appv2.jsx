@@ -94,11 +94,10 @@ const WORKS = [
 ];
 
 const PYEONG_PRESETS = {
-  // 바닥재: 전용평수, 도배: 전용평수×2.6, 몰딩: 전용평수×1.3 (둘레 개념)
-  59:  { demolition: 18, flooring: 18, wallpaper: 47, bathroom: 1, kitchen: 1, lighting: 18, molding: 23, door: 4, sash: 1 },
-  84:  { demolition: 25, flooring: 25, wallpaper: 65, bathroom: 2, kitchen: 1, lighting: 25, molding: 33, door: 5, sash: 1 },
-  119: { demolition: 36, flooring: 36, wallpaper: 93, bathroom: 2, kitchen: 1, lighting: 36, molding: 47, door: 6, sash: 1 },
-  132: { demolition: 40, flooring: 40, wallpaper: 104, bathroom: 3, kitchen: 1, lighting: 40, molding: 52, door: 7, sash: 1 },
+  59:  { demolition: 18, flooring: 18, wallpaper: 18, bathroom: 1, kitchen: 1, lighting: 18, molding: 18, door: 4, sash: 1 },
+  84:  { demolition: 25, flooring: 25, wallpaper: 25, bathroom: 2, kitchen: 1, lighting: 25, molding: 25, door: 5, sash: 1 },
+  119: { demolition: 36, flooring: 36, wallpaper: 36, bathroom: 2, kitchen: 1, lighting: 36, molding: 36, door: 6, sash: 1 },
+  132: { demolition: 40, flooring: 40, wallpaper: 40, bathroom: 3, kitchen: 1, lighting: 40, molding: 40, door: 7, sash: 1 },
 }
 
 const PYEONG_OPTIONS = [
@@ -161,13 +160,13 @@ function formatKRW(n) {
 
 export default function App() {
   const [step, setStep] = useState(0);
-  const [area, setArea] = useState(null);
+  const [pyeong, setPyeong] = useState(null);
   const [selected, setSelected] = useState([]);
   const [quantities, setQuantities] = useState({});
   const [grade, setGrade] = useState("mid");
 
   const handlePyeongSelect = (val) => {
-    setArea(val);
+    setPyeong(val);
     setQuantities(PYEONG_PRESETS[val]);
   };
 
@@ -188,10 +187,10 @@ export default function App() {
     (w) => quantities[w.id] && parseFloat(quantities[w.id]) > 0
   );
 
-  const stepLabels = ["면적·공종 선택", "수량 확인", "등급 선택", "견적 결과"];
+  const stepLabels = ["평형·공종 선택", "수량 확인", "등급 선택", "견적 결과"];
 
   const reset = () => {
-    setStep(0); setArea(null); setSelected([]); setQuantities({}); setGrade("mid");
+    setStep(0); setPyeong(null); setSelected([]); setQuantities({}); setGrade("mid");
   };
 
   return (
@@ -227,31 +226,31 @@ export default function App() {
 
         {step === 0 && (
           <div style={styles.card}>
-            <h2 style={styles.cardTitle}>전용면적을 선택해주세요</h2>
-            <p style={styles.cardDesc}>선택하시면 공종별 수량이 자동으로 입력됩니다 (수정 가능)</p>
+            <h2 style={styles.cardTitle}>평형을 선택해주세요</h2>
+            <p style={styles.cardDesc}>전용면적 기준으로 선택하시면 수량이 자동으로 입력됩니다</p>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 6, marginBottom: 16 }}>
               {PYEONG_OPTIONS.map((p) => (
                 <div key={p.value} onClick={() => handlePyeongSelect(p.value)} style={{
                   borderRadius: 12, padding: "10px 4px", cursor: "pointer",
                   display: "flex", flexDirection: "column", alignItems: "center", gap: 2,
                   position: "relative", transition: "all 0.2s", userSelect: "none",
-                  background: area === p.value ? "#eef2ff" : "#f8fafc",
-                  border: area === p.value ? "2px solid #6366f1" : "2px solid #e2e8f0",
-                  boxShadow: area === p.value ? "0 4px 16px rgba(99,102,241,0.15)" : "none",
+                  background: pyeong === p.value ? "#eef2ff" : "#f8fafc",
+                  border: pyeong === p.value ? "2px solid #6366f1" : "2px solid #e2e8f0",
+                  boxShadow: pyeong === p.value ? "0 4px 16px rgba(99,102,241,0.15)" : "none",
                 }}>
                   <div style={{ fontSize: 12, fontWeight: 800, color: "#1e293b" }}>{p.label}</div>
                   <div style={{ fontSize: 10, color: "#6366f1", fontWeight: 700, textAlign: "center" }}>{p.desc}</div>
                   <div style={{ fontSize: 9, color: "#94a3b8", textAlign: "center" }}>{p.supply}</div>
                   <div style={{ fontSize: 9, color: "#94a3b8", textAlign: "center" }}>{p.exclusive}</div>
-                  {area === p.value && <div style={styles.checkBadge}>✓</div>}
+                  {pyeong === p.value && <div style={styles.checkBadge}>✓</div>}
                 </div>
               ))}
               <div style={{
                 borderRadius: 12, padding: "10px 4px",
                 display: "flex", flexDirection: "column", alignItems: "center", gap: 2,
                 position: "relative", userSelect: "none",
-                background: typeof area === "number" && !PYEONG_OPTIONS.find(p => p.value === area) ? "#eef2ff" : "#f8fafc",
-                border: typeof area === "number" && !PYEONG_OPTIONS.find(p => p.value === area) ? "2px solid #6366f1" : "2px solid #e2e8f0",
+                background: typeof pyeong === "number" && !PYEONG_OPTIONS.find(p => p.value === pyeong) ? "#eef2ff" : "#f8fafc",
+                border: typeof pyeong === "number" && !PYEONG_OPTIONS.find(p => p.value === pyeong) ? "2px solid #6366f1" : "2px solid #e2e8f0",
               }}>
                 <div style={{ fontSize: 11, fontWeight: 800, color: "#1e293b" }}>직접입력</div>
                 <div style={{ fontSize: 10, color: "#6366f1", fontWeight: 700 }}>내 평형</div>
@@ -273,7 +272,7 @@ export default function App() {
                       Object.keys(base).forEach(k => {
                         custom[k] = ["bathroom", "kitchen", "sash"].includes(k) ? base[k] : Math.round(base[k] * ratio);
                       });
-                      setArea(val);
+                      setPyeong(val);
                       setQuantities(custom);
                     }
                   }}
@@ -288,8 +287,8 @@ export default function App() {
             <p style={styles.cardDesc}>해당하는 공종을 모두 선택하세요</p>
             <div style={{
               ...styles.grid,
-              opacity: !area ? 0.35 : 1,
-              pointerEvents: !area ? "none" : "auto",
+              opacity: !pyeong ? 0.35 : 1,
+              pointerEvents: !pyeong ? "none" : "auto",
               transition: "opacity 0.3s",
             }}>
               {WORKS.map((w) => {
@@ -310,22 +309,22 @@ export default function App() {
                 );
               })}
             </div>
-            {!area && (
-              <div style={styles.pyeongHint}>⬆ 전용면적을 먼저 선택해주세요</div>
+            {!pyeong && (
+              <div style={styles.pyeongHint}>⬆ 평형을 먼저 선택해주세요</div>
             )}
             <button style={{
               ...styles.btn,
-              opacity: (!area || selected.length === 0) ? 0.4 : 1,
-              cursor: (!area || selected.length === 0) ? "not-allowed" : "pointer",
+              opacity: (!pyeong || selected.length === 0) ? 0.4 : 1,
+              cursor: (!pyeong || selected.length === 0) ? "not-allowed" : "pointer",
             }}
-              onClick={() => area && selected.length > 0 && setStep(1)}>다음 단계 →</button>
+              onClick={() => pyeong && selected.length > 0 && setStep(1)}>다음 단계 →</button>
           </div>
         )}
 
         {step === 1 && (
           <div style={styles.card}>
             <h2 style={styles.cardTitle}>수량을 확인해주세요</h2>
-            <p style={styles.cardDesc}>전용 {area}㎡ 기준으로 자동 입력됐어요. 다르면 수정하세요</p>
+            <p style={styles.cardDesc}>{pyeong}평대 기준으로 자동 입력됐어요. 다르면 수정하세요</p>
             <div style={styles.qtyList}>
               {selectedWorks.map((w) => (
                 <div key={w.id} style={styles.qtyRow}>
@@ -394,7 +393,7 @@ export default function App() {
         {step === 3 && (
           <div style={styles.card}>
             <h2 style={styles.cardTitle}>📋 견적 결과</h2>
-            <p style={styles.cardDesc}>전용 {area}㎡ · {GRADES.find((g) => g.id === grade)?.label} 기준</p>
+            <p style={styles.cardDesc}>{pyeong}평대 · {GRADES.find((g) => g.id === grade)?.label} 기준</p>
             <div style={styles.resultList}>
               {selectedWorks.map((w) => {
                 const qty = parseFloat(quantities[w.id] || 0);
