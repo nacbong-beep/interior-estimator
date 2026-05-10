@@ -94,18 +94,18 @@ const WORKS = [
 ];
 
 const PYEONG_PRESETS = {
-  // 공급면적 기준 (전용×1.35). 도배: 공급평수×2.6, 몰딩: 공급평수×1.3, 욕실·주방·샷시 고정
-  59:  { demolition: 24, flooring: 24, wallpaper: 63, bathroom: 1, kitchen: 1, lighting: 24, molding: 31, door: 4, sash: 1 },
-  84:  { demolition: 34, flooring: 34, wallpaper: 88, bathroom: 2, kitchen: 1, lighting: 34, molding: 44, door: 5, sash: 1 },
-  119: { demolition: 48, flooring: 48, wallpaper: 125, bathroom: 2, kitchen: 1, lighting: 48, molding: 62, door: 6, sash: 1 },
-  132: { demolition: 53, flooring: 53, wallpaper: 138, bathroom: 3, kitchen: 1, lighting: 53, molding: 69, door: 7, sash: 1 },
+  // 바닥재: 전용평수, 도배: 전용평수×2.6, 몰딩: 전용평수×1.3 (둘레 개념)
+  59:  { demolition: 18, flooring: 18, wallpaper: 47, bathroom: 1, kitchen: 1, lighting: 18, molding: 23, door: 4, sash: 1 },
+  84:  { demolition: 25, flooring: 25, wallpaper: 65, bathroom: 2, kitchen: 1, lighting: 25, molding: 33, door: 5, sash: 1 },
+  119: { demolition: 36, flooring: 36, wallpaper: 93, bathroom: 2, kitchen: 1, lighting: 36, molding: 47, door: 6, sash: 1 },
+  132: { demolition: 40, flooring: 40, wallpaper: 104, bathroom: 3, kitchen: 1, lighting: 40, molding: 52, door: 7, sash: 1 },
 }
 
 const PYEONG_OPTIONS = [
-  { value: 59,  label: "59㎡",  supply: "공급 약 24평", exclusive: "전용 약 18평", desc: "소형 국민평형" },
+  { value: 59,  label: "59㎡",  supply: "공급 약 25평", exclusive: "전용 약 18평", desc: "소형 국민평형" },
   { value: 84,  label: "84㎡",  supply: "공급 약 34평", exclusive: "전용 약 25평", desc: "국민평형" },
   { value: 119, label: "119㎡", supply: "공급 약 48평", exclusive: "전용 약 36평", desc: "중대형" },
-  { value: 132, label: "132㎡", supply: "공급 약 53평", exclusive: "전용 약 40평", desc: "대형" },
+  { value: 132, label: "132㎡", supply: "공급 약 52평", exclusive: "전용 약 40평", desc: "대형" },
 ]
 
 const GRADES = [
@@ -116,8 +116,8 @@ const GRADES = [
     desc: "실용·합리적",
     details: [
       "국산 중저가 자재 사용",
-      "합지벽지·강화마루·국산 도기·PVC 창호",
-      "기본 기능 중심, 무난한 내구성",
+      "합지벽지·강화마루·국산 도기",
+      "기본 기능 중심, 내구성 무난",
       "빠른 시공·저렴한 유지비",
       "전월세·단기 거주에 적합",
     ],
@@ -130,9 +130,9 @@ const GRADES = [
     desc: "균형·무난함",
     details: [
       "국산 중고가 자재 사용",
-      "실크벽지·강마루·포세린 타일·시스템창호",
-      "디자인과 내구성의 균형",
-      "일반 아파트 리모델링 표준 사양",
+      "실크벽지·강마루·포세린 타일",
+      "디자인과 내구성 균형",
+      "일반 아파트 리모델링 표준",
       "자가 거주·장기 생활에 적합",
     ],
     range: "평당 약 150~200만원 수준",
@@ -143,9 +143,9 @@ const GRADES = [
     color: "#6366f1",
     desc: "퀄리티·프리미엄",
     details: [
-      "수입·프리미엄 브랜드 자재 사용",
-      "수입벽지·원목마루·수입 도기·독일식 창호",
-      "높은 심미성과 고급 마감",
+      "수입·고급 브랜드 자재 사용",
+      "수입벽지·원목마루·수입 도기",
+      "높은 심미성·프리미엄 마감",
       "맞춤 제작·디자인 컨셉 적용",
       "고급 아파트·펜트하우스에 적합",
     ],
@@ -228,7 +228,7 @@ export default function App() {
         {step === 0 && (
           <div style={styles.card}>
             <h2 style={styles.cardTitle}>전용면적을 선택해주세요</h2>
-            <p style={styles.cardDesc}>공급면적 기준으로 수량이 자동 입력됩니다 (수정 가능)</p>
+            <p style={styles.cardDesc}>선택하시면 공종별 수량이 자동으로 입력됩니다 (수정 가능)</p>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 6, marginBottom: 16 }}>
               {PYEONG_OPTIONS.map((p) => (
                 <div key={p.value} onClick={() => handlePyeongSelect(p.value)} style={{
@@ -325,8 +325,7 @@ export default function App() {
         {step === 1 && (
           <div style={styles.card}>
             <h2 style={styles.cardTitle}>수량을 확인해주세요</h2>
-            <p style={styles.cardDesc}>전용 {area}㎡ (공급 약 {Math.round(area * 1.35)}평) 기준으로 자동 입력됐어요. 다르면 수정하세요</p>
-
+            <p style={styles.cardDesc}>전용 {area}㎡ 기준으로 자동 입력됐어요. 다르면 수정하세요</p>
             <div style={styles.qtyList}>
               {selectedWorks.map((w) => (
                 <div key={w.id} style={styles.qtyRow}>
@@ -395,7 +394,7 @@ export default function App() {
         {step === 3 && (
           <div style={styles.card}>
             <h2 style={styles.cardTitle}>📋 견적 결과</h2>
-            <p style={styles.cardDesc}>전용 {area}㎡ (공급 약 {Math.round(area * 1.35)}평) · {GRADES.find((g) => g.id === grade)?.label} 기준</p>
+            <p style={styles.cardDesc}>전용 {area}㎡ · {GRADES.find((g) => g.id === grade)?.label} 기준</p>
             <div style={styles.resultList}>
               {selectedWorks.map((w) => {
                 const qty = parseFloat(quantities[w.id] || 0);
